@@ -15,6 +15,7 @@
 
     <modules>
         <module>discovery-server</module>
+        <module>user-service</module>
     </modules>
 
     <dependencyManagement>
