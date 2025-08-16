@@ -15,7 +15,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("username/{username}")
     ResponseEntity<Optional<User>> findByUsername(@PathVariable String username) {
         Optional<User> user = userService.getUserByUsername(username);
         return ResponseEntity.ok(user);
@@ -27,13 +27,14 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<Optional<User>> findById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserByUserId(id);
-        return ResponseEntity.ok(user);
+    @GetMapping("/id/{id}")
+    ResponseEntity <User> findById(@PathVariable Long id) {
+        return userService.getUserByUserId(id)
+                .map(ResponseEntity::ok)
+    .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/update")
+    @PutMapping
     ResponseEntity<User> update(@RequestBody User user) {
         userService.UpdateUser(user);
         return ResponseEntity.ok(user);
