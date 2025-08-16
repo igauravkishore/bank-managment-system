@@ -5,6 +5,8 @@ import com.bankingsystem.userservice.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -15,8 +17,8 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    ResponseEntity<User> findByUsername(@PathVariable String username) {
-        User user = userService.getUserByUsername(username);
+    ResponseEntity<Optional<User>> findByUsername(@PathVariable String username) {
+        Optional<User> user = userService.getUserByUsername(username);
         return ResponseEntity.ok(user);
     }
 
