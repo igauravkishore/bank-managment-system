@@ -1,9 +1,7 @@
 package com.bankingsystem.userservice.controller;
 
 import com.bankingsystem.userservice.model.User;
-import com.bankingsystem.userservice.repository.UserRepository;
 import com.bankingsystem.userservice.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +16,13 @@ public class UserController {
 
     @GetMapping("/{username}")
     ResponseEntity<User> findByUsername(@PathVariable String username) {
-        userService.getUserByUsername(username);
-        return ResponseEntity.ok().build();
+        User user = userService.getUserByUsername(username);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping
     ResponseEntity<User> save(@RequestBody User user) {
         userService.CreateUser(user);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(user);
     }
 }
