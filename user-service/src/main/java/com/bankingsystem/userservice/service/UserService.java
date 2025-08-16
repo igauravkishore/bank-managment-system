@@ -6,8 +6,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
-import java.util.UUID;
+
 
 @Service
 @Transactional
@@ -23,6 +24,7 @@ public class UserService {
     public void CreateUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 //        user.setUserId(UUID.randomUUID());
+        user.setCreatedAt(LocalDate.now());
         userRepository.save(user);
     }
 
@@ -32,5 +34,11 @@ public class UserService {
 
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public User UpdateUser(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setUpdatedAt(LocalDate.now());
+        return userRepository.save(user);
     }
 }

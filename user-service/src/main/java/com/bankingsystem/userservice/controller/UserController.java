@@ -4,8 +4,6 @@ import com.bankingsystem.userservice.model.User;
 import com.bankingsystem.userservice.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,6 +30,12 @@ public class UserController {
     @GetMapping("/{id}")
     ResponseEntity<Optional<User>> findById(@PathVariable Long id) {
         Optional<User> user = userService.getUserByUserId(id);
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/update")
+    ResponseEntity<User> update(@RequestBody User user) {
+        userService.UpdateUser(user);
         return ResponseEntity.ok(user);
     }
 }

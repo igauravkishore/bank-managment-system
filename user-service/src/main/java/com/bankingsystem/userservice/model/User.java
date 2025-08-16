@@ -1,10 +1,9 @@
 package com.bankingsystem.userservice.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -19,4 +18,6 @@ public class User {
     private String password;
     private String email;
     private String phoneNumber;
+    private LocalDate CreatedAt;
+    private LocalDate UpdatedAt;
 }
