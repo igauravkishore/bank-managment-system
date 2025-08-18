@@ -16,6 +16,8 @@
     <modules>
         <module>discovery-server</module>
         <module>user-service</module>
+        <module>account-service</module>
+        <module>transaction-service</module>
     </modules>
 
     <dependencyManagement>
