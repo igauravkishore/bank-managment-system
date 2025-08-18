@@ -6,14 +6,13 @@ import com.bankingsystem.accountservice.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -44,8 +43,41 @@ public class AccountController {
         }
 
         account.setAccountNumber(accountService.generateAccountNumber());
-        account.setCreatedDate(LocalDateTime.now());
+        account.setCreatedAt(LocalDateTime.now());
         Account savedAccount = accountRepository.save(account);
         return ResponseEntity.ok(savedAccount);
     }
+
+    @PutMapping("/{accountNumber}/balance")
+    public ResponseEntity<Account> updateAccountBalance(@PathVariable String accountNumber, @RequestParam BigDecimal amount){
+        try{
+            Account updatedAccount = accountService.updateBalance(accountNumber, amount);
+            return ResponseEntity.ok(updatedAccount);
+        }catch(RuntimeException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Account>> getAlAccounts() {
+      return ResponseEntity.ok(accountRepository.findAll());
+    }
+
+    @GetMapping("/accountNumber/{accountNumber}")
+    public ResponseEntity<Account> getAccountByAccountNumber(@PathVariable String accountNumber) {
+        return ResponseEntity.ok(accountService.findByAccountNumber(accountNumber));
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<Account>> getAccountsByUserId(@PathVariable Long userId) {
+        try{
+            List<Account> accounts = accountService.findByUserId(userId);
+            if(accounts.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }else return ResponseEntity.ok(accounts);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

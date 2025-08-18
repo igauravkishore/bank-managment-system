@@ -20,8 +20,9 @@ public class Account {
     private BigDecimal balance;
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
 
     public enum AccountType {
         SAVINGS, CURRENT, FIXED_DEPOSIT

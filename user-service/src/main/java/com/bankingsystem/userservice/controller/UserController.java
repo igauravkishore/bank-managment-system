@@ -2,6 +2,7 @@ package com.bankingsystem.userservice.controller;
 
 import com.bankingsystem.userservice.model.User;
 import com.bankingsystem.userservice.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
@@ -22,9 +23,9 @@ public class UserController {
     }
 
     @PostMapping
-    ResponseEntity<User> save(@RequestBody User user) {
-        userService.CreateUser(user);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<User> save(@RequestBody User user) {
+        User savedUser = userService.createUser(user);  // returns saved entity
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @GetMapping("/id/{id}")

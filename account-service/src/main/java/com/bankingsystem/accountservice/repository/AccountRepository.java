@@ -9,4 +9,5 @@ public interface AccountRepository extends JpaRepository<Account,Long> {
     List<Account> findByUserId(Long userId);
 
     boolean existsByAccountNumber(String accountNumber);
+    Account findByAccountNumber(String accountNumber);
 }

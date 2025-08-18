@@ -1,5 +1,6 @@
 package com.bankingsystem.userservice.service;
 
+import com.bankingsystem.userservice.exceptions.UserAlreadyExistsException;
 import com.bankingsystem.userservice.model.User;
 import com.bankingsystem.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -21,11 +22,15 @@ public class UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public void CreateUser(User user) {
+    public User createUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail()) ||
+                userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
+            throw new UserAlreadyExistsException("Email or Phone number already exists");
+        }
+
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-//        user.setUserId(UUID.randomUUID());
         user.setCreatedAt(LocalDate.now());
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public Optional<User> getUserByUserId(Long userId) {
