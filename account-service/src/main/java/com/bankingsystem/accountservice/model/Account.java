@@ -23,7 +23,6 @@ public class Account {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-
     public enum AccountType {
         SAVINGS, CURRENT, FIXED_DEPOSIT
     }

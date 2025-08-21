@@ -48,12 +48,32 @@ public class AccountController {
         return ResponseEntity.ok(savedAccount);
     }
 
-    @PutMapping("/{accountNumber}/balance")
-    public ResponseEntity<Account> updateAccountBalance(@PathVariable String accountNumber, @RequestParam BigDecimal amount){
+//    @PutMapping("/{accountNumber}/balance")
+//    public ResponseEntity<Account> updateAccountBalance(@PathVariable String accountNumber, @RequestParam BigDecimal amount){
+//        try{
+//            Account updatedAccount = accountService.updateBalance(accountNumber, amount);
+//            return ResponseEntity.ok(updatedAccount);
+//        }catch(RuntimeException e){
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
+    @PostMapping("/{AccountNumber}/deposit")
+    public ResponseEntity<Account> deposit(@PathVariable String AccountNumber, @RequestParam BigDecimal amount){
         try{
-            Account updatedAccount = accountService.updateBalance(accountNumber, amount);
-            return ResponseEntity.ok(updatedAccount);
+            Account depositedAccount = accountService.deposit(AccountNumber, amount);
+            return ResponseEntity.ok(depositedAccount);
         }catch(RuntimeException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/{AccountNumber}/withdraw")
+    public ResponseEntity<Account> withdraw(@PathVariable String AccountNumber, @RequestParam BigDecimal amount){
+        try {
+            Account withdrawedAccount = accountService.withdraw(AccountNumber, amount);
+            return ResponseEntity.ok(withdrawedAccount);
+        }catch (RuntimeException e){
             return ResponseEntity.notFound().build();
         }
     }

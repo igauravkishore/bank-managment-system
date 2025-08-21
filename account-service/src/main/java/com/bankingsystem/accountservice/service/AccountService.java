@@ -5,6 +5,9 @@ import com.bankingsystem.accountservice.repository.AccountRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestClient;
 
 import java.math.BigDecimal;
@@ -41,14 +44,40 @@ public class AccountService {
     }
 
 
-    public Account updateBalance(String accountNumber, BigDecimal amount){
-        Optional<Account> accountOpt = Optional.ofNullable(accountRepository.findByAccountNumber(accountNumber));
-        if (accountOpt.isEmpty()) {
+//    public Account updateBalance(String accountNumber, BigDecimal amount){
+//        Optional<Account> accountOpt = Optional.ofNullable(accountRepository.findByAccountNumber(accountNumber));
+//        if (accountOpt.isEmpty()) {
+//            throw new RuntimeException("Account not found");
+//        }
+//        Account account = accountOpt.get();
+//        BigDecimal currentBalance = account.getBalance() != null ? account.getBalance() : BigDecimal.ZERO;
+//        account.setBalance(currentBalance.add(amount));
+//        account.setUpdatedAt(LocalDateTime.now());
+//        return accountRepository.save(account);
+//    }
+
+    public Account deposit(String AccountNumber, BigDecimal amount){
+        Optional<Account> accountOptional = Optional.ofNullable(accountRepository.findByAccountNumber(AccountNumber));
+        if(accountOptional.isEmpty()){
             throw new RuntimeException("Account not found");
         }
-        Account account = accountOpt.get();
-        BigDecimal currentBalance = account.getBalance() != null ? account.getBalance() : BigDecimal.ZERO;
-        account.setBalance(currentBalance.add(amount));
+        Account account = accountOptional.get();
+        account.setBalance(account.getBalance().add(amount));
+        account.setUpdatedAt(LocalDateTime.now());
+        return accountRepository.save(account);
+    }
+
+
+    public Account withdraw(String AccountNumber,BigDecimal amount){
+        Optional<Account> accountOptional = Optional.ofNullable(accountRepository.findByAccountNumber(AccountNumber));
+        if(accountOptional.isEmpty()){
+            throw new RuntimeException("Account not found");
+        }
+        Account account = accountOptional.get();
+        if (account.getBalance().compareTo(amount) < 0) {
+            throw new RuntimeException("Insufficient funds");
+        }
+        account.setBalance(account.getBalance().subtract(amount));
         account.setUpdatedAt(LocalDateTime.now());
         return accountRepository.save(account);
     }
