@@ -49,7 +49,9 @@ public class TransactionService {
                     .retrieve()
                     .toBodilessEntity();
             transaction.setTransactionStatus(Transaction.TransactionStatus.SUCCESS);
+            kafkaTemplate.send("transaction-events", "Transfer of " + amount + " from " + fromAccount + " to " + toAccount + " successful.");
             return transactionRepository.save(transaction);
+
         }catch(Exception e){
             try {
                 restClient.post()
@@ -59,7 +61,7 @@ public class TransactionService {
             } catch (Exception rollbackEx) {
                 System.err.println("Rollback failed: " + rollbackEx.getMessage());
             }
-
+            kafkaTemplate.send("transaction-events", "Transfer of " + amount + " from " + fromAccount + " to " + toAccount + " is failed.");
             throw new RuntimeException("Transfer failed. Rollback performed: " + e.getMessage());
         }
     }
