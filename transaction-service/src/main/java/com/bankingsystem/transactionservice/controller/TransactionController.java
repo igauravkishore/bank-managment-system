@@ -5,10 +5,9 @@ import com.bankingsystem.transactionservice.model.Transaction;
 import com.bankingsystem.transactionservice.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -35,4 +34,23 @@ public class TransactionController {
                     .body("Transaction failed: " + e.getMessage());
         }
     }
+
+    @GetMapping
+    public ResponseEntity<List<Transaction>> getAllTransactions() {
+        List<Transaction> transactions = transactionService.getAllTransactions();
+        return ResponseEntity.ok(transactions);
+    }
+
+    @GetMapping("/{fromAccountNumber}")
+    public ResponseEntity<List<Transaction>> getAllTransactionsByFromAccount(@PathVariable String fromAccountNumber) {
+        List<Transaction> transactions = transactionService.getTransactionsByFromAccount(fromAccountNumber);
+        return ResponseEntity.ok(transactions);
+    }
+
+    @GetMapping("/toAccountNumber")
+    public ResponseEntity<List<Transaction>> getAllTransactionsByToAccountNumber(@RequestParam String toAccountNumber) {
+        List<Transaction> transactions = transactionService.getTransactionsByToAccount(toAccountNumber);
+        return ResponseEntity.ok(transactions);
+    }
+
 }

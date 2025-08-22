@@ -100,4 +100,9 @@ public class AccountController {
         }
     }
 
+    @GetMapping("/{accountNumber}/balance")
+    public ResponseEntity<BigDecimal> getBalanceByAccountNumber(@PathVariable String accountNumber) {
+        return ResponseEntity.ok(accountService.getBalance(accountNumber));
+    }
+
 }

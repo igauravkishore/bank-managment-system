@@ -2,6 +2,7 @@ package com.bankingsystem.transactionservice.service;
 
 import com.bankingsystem.transactionservice.model.Transaction;
 import com.bankingsystem.transactionservice.repository.TransactionRepository;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,7 @@ import org.springframework.web.client.RestClient;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -16,11 +18,13 @@ public class TransactionService {
 
     private RestClient restClient;
     private final TransactionRepository transactionRepository;
+    private KafkaTemplate<String, Object> kafkaTemplate;
     private static final String ACCOUNT_URL = "http://account-service/api/accounts";
 
-    public TransactionService(RestClient restClient, TransactionRepository transactionRepository) {
+    public TransactionService(RestClient restClient, TransactionRepository transactionRepository, KafkaTemplate<String, Object> kafkaTemplate) {
         this.restClient = restClient;
         this.transactionRepository = transactionRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Transactional
@@ -58,5 +62,18 @@ public class TransactionService {
 
             throw new RuntimeException("Transfer failed. Rollback performed: " + e.getMessage());
         }
+    }
+
+
+    public List<Transaction> getAllTransactions(){
+        return transactionRepository.findAll();
+    }
+
+    public List<Transaction> getTransactionsByFromAccount(String fromAccount) {
+        return transactionRepository.findByFromAccountNumber(fromAccount);
+    }
+
+    public List<Transaction> getTransactionsByToAccount(String toAccount) {
+        return transactionRepository.findByToAccountNumber(toAccount);
     }
 }

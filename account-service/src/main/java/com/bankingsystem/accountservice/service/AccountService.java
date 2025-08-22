@@ -83,6 +83,14 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
+    public BigDecimal getBalance(String AccountNumber){
+        Optional<Account> accountOptional = Optional.ofNullable(accountRepository.findByAccountNumber(AccountNumber));
+        if(accountOptional.isEmpty()){
+            throw new RuntimeException("Account not found");
+        }
+        return accountOptional.get().getBalance();
+    }
+
     public void deleteAccount(String accountNumber) {
         accountRepository.delete(accountRepository.findByAccountNumber(accountNumber));
     }
