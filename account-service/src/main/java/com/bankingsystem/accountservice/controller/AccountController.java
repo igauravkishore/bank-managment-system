@@ -105,4 +105,9 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getBalance(accountNumber));
     }
 
+    @DeleteMapping("/{accountNumber}")
+    public ResponseEntity<Account> deleteAccount(@PathVariable String accountNumber) {
+        accountService.deleteAccount(accountNumber);
+        return ResponseEntity.noContent().build();
+    }
 }
