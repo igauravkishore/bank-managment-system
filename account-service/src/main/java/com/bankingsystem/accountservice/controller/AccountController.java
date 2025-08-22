@@ -35,7 +35,7 @@ public class AccountController {
         // Verify the user exists before creating an account
         try {
             restClient.get()
-                    .uri("http://user-service/api/users/{userId}", userId)
+                    .uri("http://user-service/api/users/id/{userId}", userId)
                     .retrieve()
                     .toBodilessEntity();
         } catch (HttpClientErrorException.NotFound ex) {
@@ -58,20 +58,20 @@ public class AccountController {
 //        }
 //    }
 
-    @PostMapping("/{AccountNumber}/deposit")
-    public ResponseEntity<Account> deposit(@PathVariable String AccountNumber, @RequestParam BigDecimal amount){
+    @PostMapping("/{accountNumber}/deposit")
+    public ResponseEntity<Account> deposit(@PathVariable String accountNumber, @RequestParam BigDecimal amount){
         try{
-            Account depositedAccount = accountService.deposit(AccountNumber, amount);
+            Account depositedAccount = accountService.deposit(accountNumber, amount);
             return ResponseEntity.ok(depositedAccount);
         }catch(RuntimeException e){
             return ResponseEntity.notFound().build();
         }
     }
 
-    @PostMapping("/{AccountNumber}/withdraw")
-    public ResponseEntity<Account> withdraw(@PathVariable String AccountNumber, @RequestParam BigDecimal amount){
+    @PostMapping("/{accountNumber}/withdraw")
+    public ResponseEntity<Account> withdraw(@PathVariable String accountNumber, @RequestParam BigDecimal amount){
         try {
-            Account withdrawedAccount = accountService.withdraw(AccountNumber, amount);
+            Account withdrawedAccount = accountService.withdraw(accountNumber, amount);
             return ResponseEntity.ok(withdrawedAccount);
         }catch (RuntimeException e){
             return ResponseEntity.notFound().build();

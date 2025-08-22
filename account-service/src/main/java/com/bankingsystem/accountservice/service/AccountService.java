@@ -62,7 +62,8 @@ public class AccountService {
             throw new RuntimeException("Account not found");
         }
         Account account = accountOptional.get();
-        account.setBalance(account.getBalance().add(amount));
+        BigDecimal currentBalance = account.getBalance() != null ? account.getBalance() : BigDecimal.ZERO;
+        account.setBalance(currentBalance.add(amount));
         account.setUpdatedAt(LocalDateTime.now());
         return accountRepository.save(account);
     }

@@ -28,11 +28,11 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionStatus TransactionStatus;
 
-    enum TransactionType{
+    public enum TransactionType{
         TRANSFER, DEPOSIT, WITHDRAWAL
     }
 
-    enum TransactionStatus{
+    public enum TransactionStatus{
         PENDING, SUCCESS, FAILED
     }
 }

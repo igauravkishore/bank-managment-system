@@ -10,8 +10,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransferRequest {
-    private String FromAccount;
-    private String ToAccount;
+    private String fromAccount;
+    private String toAccount;
     private BigDecimal Amount;
-    private String description;
 }
